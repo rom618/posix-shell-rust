@@ -1,3 +1,4 @@
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum TokenType {
     Word,
     AssignmentWord,
@@ -42,11 +43,27 @@ pub enum TokenType {
     Teof,
     Error
 }
+
+pub const OPS: &[&str] = &[
+    "&", "&&", "|", "||", ";;", "<<",
+    ">>", "<&", ">&", "<>", "<<-", ">|",
+    "{", "}", "(", ")", ";",
+];
+
+pub const RED: &[&str] = &[
+    "<<", ">>", "<&", ">&", "<>", "<<-", ">|",
+];
+
 pub struct Token {
     pub value: String,
     pub token_type: TokenType
 }
 
 impl Token {
-
+    pub fn new(token_type: TokenType, value: String) -> Self {
+        Self {
+            token_type,
+            value,
+        }
+    }
 }

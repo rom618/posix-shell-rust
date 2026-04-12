@@ -1,27 +1,29 @@
 use std::fs::File;
-use std::io::{self, Read};
-
-use lexer::Lexer;
+use std::io::BufReader;
+use std::io;
 use crate::lexer;
-use crate::lexer::LexerMode;
+use lexer::lexer::Lexer;
+use lexer::lexer::LexerMode;
+use crate::io_backend::io_backend;
+use io_backend::InputSource;
 
 pub struct Variable
 {
-    name: String,
-    value: String,
-    read_only: bool
+    pub name: String,
+    pub value: String,
+    pub read_only: bool
 }
 
 pub struct Shell
 {
-    pretty_print: bool,
-    arguments: Vec<String>,
-    lexer: Lexer,
-    vars: Vec<Variable>,
-    encountered_exit: bool,
-    status_code: u8,
-    encountered_continue: bool,
-    encountered_break: bool,
+    pub pretty_print: bool,
+    pub arguments: Vec<String>,
+    pub lexer: Lexer,
+    pub vars: Vec<Variable>,
+    pub encountered_exit: bool,
+    pub status_code: u8,
+    pub encountered_continue: bool,
+    pub encountered_break: bool,
 }
 
 pub fn build_shell(args: Vec<String>) -> Shell {
@@ -45,18 +47,20 @@ pub fn build_shell(args: Vec<String>) -> Shell {
         }
     }
 
-    let file = if let Some(path) = script_path {
-        match File::open(path) {
-            Ok(f) => Some(f),
-            Err(_) => None
+    let source = if let Some(path) = script_path {
+        let file = File::open(path).ok().map(BufReader::new);
+        match file {
+            Some(f) => InputSource::File(f),
+            None => InputSource::Stdin(io::stdin().lock()),
         }
+    } else if let Some(input) = input_string {
+        InputSource::String(input)
     } else {
-        None
+        InputSource::Stdin(io::stdin().lock())
     };
 
     let lexer = Lexer {
-        file,
-        input_string,
+        source,
         curr: None,
         line: None,
         index: 0,
@@ -64,6 +68,7 @@ pub fn build_shell(args: Vec<String>) -> Shell {
         s_quote: '\0',
         d_quote: '\0',
         dollar: '\0',
+        error: None,
     };
 
     Shell {
