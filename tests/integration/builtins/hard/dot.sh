@@ -1,0 +1,2 @@
+. ./vars.sh
+echo "$x"

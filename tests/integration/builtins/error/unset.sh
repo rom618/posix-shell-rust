@@ -1,0 +1,2 @@
+unset UID
+echo "$UID"
