@@ -1,1 +1,13 @@
+# Build output
 /target
+
+# Environment & IDE
+.env
+.DS_Store
+.idea/
+.vscode/
+*.iml
+
+# Rust-specific
+Cargo.lock.bak
+**/*.rs.bk
