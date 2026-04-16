@@ -3,6 +3,7 @@ pub enum TokenType {
     Word,
     AssignmentWord,
     Heredoc,
+    HeredocEof,
     Name, // useless
     Newline,
     IoNumber,
@@ -15,7 +16,7 @@ pub enum TokenType {
     Dgreat, // >>
     LessAnd, // <&
     GreatAnd, // >&
-    LessGreat, // <>
+    LessGreat, // <`>
     DlessDash, // <<-
     Clobber, // >|
     IfToken,
@@ -50,10 +51,7 @@ pub const OPS: &[&str] = &[
     "{", "}", "(", ")", ";",
 ];
 
-pub const RED: &[&str] = &[
-    "<<", ">>", "<&", ">&", "<>", "<<-", ">|",
-];
-
+#[derive(Clone, Debug)]
 pub struct Token {
     pub value: String,
     pub token_type: TokenType

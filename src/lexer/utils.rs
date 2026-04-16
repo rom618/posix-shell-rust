@@ -18,6 +18,25 @@ pub fn is_redirection(t: TokenType) -> bool {
             | TokenType::Clobber
     )
 }
+
+pub fn is_reserved_word(word: &str) -> bool {
+    match word {
+        "if"
+        | "then"
+        | "else"
+        | "elif"
+        | "fi"
+        | "do"
+        | "done"
+        | "case"
+        | "esac"
+        | "while"
+        | "until"
+        | "for"
+        | "in" => true,
+        _ => false
+    }
+}
 pub fn type_is_reserved(t: TokenType) -> bool {
     matches!(
         t,

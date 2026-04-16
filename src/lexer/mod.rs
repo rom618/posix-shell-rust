@@ -1,6 +1,4 @@
-
-
 pub mod token;
 pub mod lexer;
-mod utils;
-
+pub mod utils;
+pub mod structs;
